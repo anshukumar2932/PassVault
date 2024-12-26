@@ -59,21 +59,24 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        user = request.form['user']
-        password = request.form['password']
-        
-        user_data = get_user_by_userid(user)
-        if user_data:
-            flash("User already exists")
-            return render_template('login_signup.html', mode="signup")
-        
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        create_user(user, hashed_password)
-        flash("Signup successful. Please log in.")
-        return redirect(url_for('login'))
+    if not current_user.is_authenticated:
+        if request.method == 'POST':
+            user = request.form['user']
+            password = request.form['password']
+            
+            user_data = get_user_by_userid(user)
+            if user_data:
+                flash("User already exists")
+                return render_template('login_signup.html', mode="signup")
+            
+            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+            create_user(user, hashed_password)
+            flash("Signup successful. Please log in.")
+            return redirect(url_for('login'))
+        return render_template('login_signup.html', mode="signup")
+    else:
+        return redirect(url_for('protected', username=current_user.id))
     
-    return render_template('login_signup.html', mode="signup")
 
 @app.route('/protected/<username>')
 @login_required
