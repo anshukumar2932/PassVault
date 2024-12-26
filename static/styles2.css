@@ -1,0 +1,82 @@
+/* General styling for the page */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Styling for the user container */
+.user {
+    position: absolute;
+    top: 20px; /* Increased spacing for better visibility */
+    left: 20px; /* Increased spacing for better alignment */
+    text-align: left;
+    background-color: #ffffff;
+    padding: 15px 25px; /* Increased padding for more whitespace */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    max-width: 300px; /* Constrain width for better design */
+    word-wrap: break-word; /* Handle long content gracefully */
+}
+
+/* Welcome message styling */
+.user h1 {
+    font-size: 18px; /* Increased font size for readability */
+    color: #4caf50;
+    margin-bottom: 10px;
+}
+
+/* Additional text styling */
+.user p {
+    font-size: 14px; /* Better readability */
+    color: #666;
+    margin: 0;
+}
+
+/* Styling for the function container */
+.function {
+    position: absolute;
+    top: 20%; /* Center vertically relative to the viewport */
+    left: 50%; /* Center horizontally relative to the viewport */
+    transform: translate(-50%, -50%); /* Ensure perfect centering */
+    text-align: left;
+    background-color: #ffffff;
+    padding: 20px 30px; /* Increased padding for a comfortable layout */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow for prominence */
+    max-width: 400px; /* Constrain width for better design */
+    word-wrap: break-word;
+}
+
+/* Function container heading */
+.function h1 {
+    font-size: 20px; /* Increased font size for prominence */
+    color: #007bff; /* Blue color for a distinct look */
+    margin-bottom: 12px;
+}
+
+/* Additional text in the function container */
+.function p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+
+/* Add responsive styling */
+@media (max-width: 768px) {
+    .user, .function {
+        max-width: 90%; /* Allow containers to adapt to smaller screens */
+        padding: 15px;
+    }
+
+    .user h1, .function h1 {
+        font-size: 16px; /* Adjust heading size for smaller screens */
+    }
+
+    .user p, .function p {
+        font-size: 12px; /* Adjust text size for smaller screens */
+    }
+}
