@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from db import init_db, create_user, get_user_by_userid, get_password, update_password
+from db import init_db, create_user, get_user_by_userid, get_user_data, update_password,add_user_data
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -123,6 +123,24 @@ def forgot_password():
         return redirect(url_for('forgot_password'))
 
     return render_template('forgot_password.html', email_form=email_form)
+@app.route('/protected/add_password', methods=['GET', 'POST'])
+@login_required
+def add_password():
+    if request.method == 'POST':
+        user = request.form.get('user')
+        password = request.form.get('password')
+        result=add_user_data(current_user.id, user, password)
+        if result:
+            flash("Succesfully data added")
+        else:
+            flash(result)
+    return render_template('index.html',username=current_user.id,mode="Add")
+
+@app.route('/protected/view_password', methods=['GET'])
+@login_required
+def view_password():
+    credentials = get_user_data(current_user.id)
+    return render_template('index.html', username=current_user.id, mode="View", credentials=credentials)
 
 if __name__ == "__main__":
     app.run(debug=True)
