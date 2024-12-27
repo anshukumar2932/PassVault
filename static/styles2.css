@@ -6,77 +6,243 @@ body {
     background-color: #f4f4f9;
     color: #333;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 /* Styling for the user container */
 .user {
     position: absolute;
-    top: 20px; /* Increased spacing for better visibility */
-    left: 20px; /* Increased spacing for better alignment */
+    top: 20px;
+    left: 20px;
     text-align: left;
     background-color: #ffffff;
-    padding: 15px 25px; /* Increased padding for more whitespace */
+    padding: 15px 25px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
-    max-width: 300px; /* Constrain width for better design */
-    word-wrap: break-word; /* Handle long content gracefully */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-width: 300px;
+    word-wrap: break-word;
 }
 
 /* Welcome message styling */
 .user h1 {
-    font-size: 18px; /* Increased font size for readability */
+    font-size: 18px;
     color: #4caf50;
     margin-bottom: 10px;
 }
 
-/* Additional text styling */
-.user p {
-    font-size: 14px; /* Better readability */
-    color: #666;
-    margin: 0;
+/* Logout button */
+.user button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.user button:hover {
+    background-color: #e60000;
 }
 
 /* Styling for the function container */
 .function {
-    position: absolute;
-    top: 20%; /* Center vertically relative to the viewport */
-    left: 50%; /* Center horizontally relative to the viewport */
-    transform: translate(-50%, -50%); /* Ensure perfect centering */
-    text-align: left;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
     background-color: #ffffff;
-    padding: 20px 30px; /* Increased padding for a comfortable layout */
+    padding: 20px 30px;
     border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow for prominence */
-    max-width: 400px; /* Constrain width for better design */
-    word-wrap: break-word;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    width: 400px;
 }
 
-/* Function container heading */
-.function h1 {
-    font-size: 20px; /* Increased font size for prominence */
-    color: #007bff; /* Blue color for a distinct look */
-    margin-bottom: 12px;
+/* Buttons inside function container */
+.function a {
+    text-decoration: none;
 }
 
-/* Additional text in the function container */
-.function p {
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 14px;
-    color: #555;
-    margin: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
 }
 
-/* Add responsive styling */
-@media (max-width: 768px) {
-    .user, .function {
-        max-width: 90%; /* Allow containers to adapt to smaller screens */
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #003f7f;
+    transform: scale(1);
+}
+
+/* Styling for the form container */
+.form-box {
+    margin-top: 30px;
+    padding: 20px 25px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    width: 400px;
+}
+
+/* Form heading */
+.form-box h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Form input group */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Primary button styling */
+.primary-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+    background-color: #45a049;
+}
+
+.primary-btn:active {
+    background-color: #3e8e41;
+    transform: scale(0.98);
+}
+
+/* Result box styling */
+.result-box {
+    margin-top: 30px;
+    padding: 20px 25px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    width: 400px;
+}
+
+.result-box h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.result-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.result-box li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Link styling */
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Responsive styling */
+
+/* For screens smaller than 1024px */
+@media (max-width: 1024px) {
+    .user, .function, .form-box, .result-box {
+        max-width: 80%;
         padding: 15px;
     }
 
-    .user h1, .function h1 {
-        font-size: 16px; /* Adjust heading size for smaller screens */
+    .user h1, .form-box h2, .result-box h2 {
+        font-size: 18px;
     }
 
-    .user p, .function p {
-        font-size: 12px; /* Adjust text size for smaller screens */
+    .user p {
+        font-size: 13px;
+    }
+}
+
+/* For screens smaller than 768px */
+@media (max-width: 768px) {
+    .user, .function, .form-box, .result-box {
+        max-width: 90%;
+        padding: 12px;
+    }
+
+    .user h1, .form-box h2, .result-box h2 {
+        font-size: 16px;
+    }
+
+    .user p {
+        font-size: 12px;
+    }
+}
+
+/* For screens smaller than 480px */
+@media (max-width: 480px) {
+    .user, .function, .form-box, .result-box {
+        max-width: 95%;
+        padding: 10px;
+    }
+
+    .user h1, .form-box h2, .result-box h2 {
+        font-size: 14px;
+    }
+
+    .user p {
+        font-size: 11px;
     }
 }
