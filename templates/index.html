@@ -47,11 +47,24 @@
     {% if mode == 'View' %}
         <div class="result-box">
             <h2>Credentials</h2>
-            <ul>
-                {% for credential in credentials %}
-                    <li>{{ credential }}</li>
-                {% endfor %}
-            </ul>
+            <table>
+                <thead>
+                    <th>S.No.</th>
+                    <th>User ID</th>
+                    <th>Password</th>
+                </thead>
+                <tbody>
+                    
+                    {% for credential in credentials %}
+                    <tr>
+                        <td>{{ credential['id'] }}</td>
+                        <td>{{ credential['userid'] }}</td>
+                        <td>{{ credential['password'] }}</td>
+                    </tr>
+                    {% endfor %}
+                
+                </tbody>
+            </table>
         </div>
         {% if get_flashed_messages() %}
             <h3>{{ get_flashed_messages() | join(" ") }}</h3>

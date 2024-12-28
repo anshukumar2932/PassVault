@@ -4,9 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import init_db, create_user, get_user_by_userid, get_user_data, update_password, add_user_data
 from datetime import timedelta
 
+
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
-app.permanent_session_lifetime = timedelta(minutes=15)
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 # Initialize Flask-Login
 login_manager = LoginManager(app)
