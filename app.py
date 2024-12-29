@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import init_db, create_user, get_user_by_userid, get_user_data, update_password, add_user_data
 from datetime import timedelta
 
-
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 app.permanent_session_lifetime = timedelta(minutes=30)
@@ -30,15 +29,18 @@ def load_user(user_id):
     return User(user_data['user']) if user_data else None
 
 def redirect_authenticated_user():
+    """Redirect authenticated users to their protected page."""
     if current_user.is_authenticated:
         return redirect(url_for('protected', username=current_user.id))
 
 @app.route('/')
 def home():
+    """Home route redirects to login or protected page based on authentication."""
     return redirect_authenticated_user() or redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Handle user login."""
     session.clear()
     if request.method == 'POST':
         user = request.form['user']
@@ -55,6 +57,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """Handle user registration."""
     if current_user.is_authenticated:
         return redirect(url_for('protected', username=current_user.id))
 
@@ -74,6 +77,7 @@ def signup():
 @app.route('/protected/<username>')
 @login_required
 def protected(username):
+    """Protected route accessible only to authenticated users."""
     if username != current_user.id:
         return "Unauthorized", 403
     return render_template('index.html', username=current_user.id)
@@ -81,6 +85,7 @@ def protected(username):
 @app.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    """Handle user logout."""
     logout_user()
     session.clear()
     flash("Logged out successfully")
@@ -88,6 +93,7 @@ def logout():
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
+    """Handle password recovery process."""
     if request.method == 'POST':
         username = request.form.get('username')
         new_password = request.form.get('new_password')
@@ -111,6 +117,7 @@ def forgot_password():
 @app.route('/protected/add_password', methods=['GET', 'POST'])
 @login_required
 def add_password():
+    """Allow users to add password-protected data."""
     if request.method == 'POST':
         user = request.form.get('user')
         password = request.form.get('password')
@@ -122,6 +129,7 @@ def add_password():
 @app.route('/protected/view_password', methods=['GET'])
 @login_required
 def view_password():
+    """Allow users to view their saved password-protected data."""
     credentials = get_user_data(current_user.id)
     return render_template('index.html', username=current_user.id, mode="View", credentials=credentials)
 
