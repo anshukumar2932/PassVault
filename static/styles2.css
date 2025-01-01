@@ -10,6 +10,12 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Styling for the user container */
@@ -24,6 +30,12 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     max-width: 300px;
     word-wrap: break-word;
+    animation: slideInLeft 1s ease-in-out;
+}
+
+@keyframes slideInLeft {
+    0% { opacity: 0; transform: translateX(-50px); }
+    100% { opacity: 1; transform: translateX(0); }
 }
 
 /* Welcome message styling */
@@ -42,11 +54,17 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .user button:hover {
     background-color: #e60000;
+    transform: scale(1.05);
+}
+
+.user button:active {
+    background-color: #cc0000;
+    transform: scale(1);
 }
 
 /* Styling for the function container */
@@ -62,6 +80,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     max-width: 90%;
     width: 400px;
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 /* Buttons inside function container */
@@ -100,6 +119,12 @@ button:active {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     max-width: 90%;
     width: 400px;
+    animation: slideInUp 1s ease-in-out;
+}
+
+@keyframes slideInUp {
+    0% { opacity: 0; transform: translateY(50px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Form heading */
@@ -140,11 +165,12 @@ button:active {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .primary-btn:hover {
     background-color: #45a049;
+    transform: scale(1.05);
 }
 
 .primary-btn:active {
@@ -161,6 +187,7 @@ button:active {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     max-width: 90%;
     width: 400px;
+    animation: fadeIn 2s ease-in-out;
 }
 
 .result-box h2 {

@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import init_db, create_user, get_user_by_userid, get_user_data, update_password, add_user_data
 from datetime import timedelta
 
-
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 app.permanent_session_lifetime = timedelta(minutes=30)
@@ -16,9 +15,6 @@ login_manager.login_view = 'login'
 # Initialize the database
 init_db()
 
-# Reset session for password recovery
-reset_session = {}
-
 # User model
 class User(UserMixin):
     def __init__(self, user_id):
@@ -29,17 +25,21 @@ def load_user(user_id):
     user_data = get_user_by_userid(user_id)
     return User(user_data['user']) if user_data else None
 
+@app.before_request
 def redirect_authenticated_user():
-    if current_user.is_authenticated:
+    """Redirect authenticated users to their protected page."""
+    if current_user.is_authenticated and request.endpoint in ['login', 'signup']:
         return redirect(url_for('protected', username=current_user.id))
 
 @app.route('/')
 def home():
-    return redirect_authenticated_user() or redirect(url_for('login'))
+    """Home route redirects to login or protected page based on authentication."""
+    return redirect(url_for('login') if not current_user.is_authenticated else url_for('protected', username=current_user.id))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    session.clear()
+    """Handle user login."""
+    session.clear()  # Clear previous session data
     if request.method == 'POST':
         user = request.form['user']
         password = request.form['password']
@@ -55,9 +55,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('protected', username=current_user.id))
-
+    """Handle user registration."""
     if request.method == 'POST':
         user = request.form['user']
         password = request.form['password']
@@ -74,6 +72,7 @@ def signup():
 @app.route('/protected/<username>')
 @login_required
 def protected(username):
+    """Protected route accessible only to authenticated users."""
     if username != current_user.id:
         return "Unauthorized", 403
     return render_template('index.html', username=current_user.id)
@@ -81,6 +80,7 @@ def protected(username):
 @app.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    """Handle user logout."""
     logout_user()
     session.clear()
     flash("Logged out successfully")
@@ -88,40 +88,47 @@ def logout():
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
+    """Handle password recovery process."""
     if request.method == 'POST':
         username = request.form.get('username')
         new_password = request.form.get('new_password')
 
-        if username and not new_password:
-            if not get_user_by_userid(username):
+        if username:
+            user_data = get_user_by_userid(username)
+            if not user_data:
                 flash("User does not exist!")
+            elif new_password:
+                reset_session_username = reset_session.pop('user', None)
+                if reset_session_username:
+                    update_password(reset_session_username, generate_password_hash(new_password, method='pbkdf2:sha256'))
+                    flash("Password updated successfully!")
+                    return redirect(url_for('login'))
+                flash("Session expired, please start over.")
+                return render_template('forgot_password.html', email_form=False)
             else:
                 reset_session['user'] = username
                 return render_template('forgot_password.html', email_form=False)
 
-        elif new_password and reset_session.get('user'):
-            update_password(reset_session.pop('user'), generate_password_hash(new_password, method='pbkdf2:sha256'))
-            flash("Password updated successfully!")
-            return redirect(url_for('login'))
-
         flash("An error occurred. Please try again.")
-
     return render_template('forgot_password.html', email_form=True)
 
 @app.route('/protected/add_password', methods=['GET', 'POST'])
 @login_required
 def add_password():
+    """Allow users to add password-protected data."""
     if request.method == 'POST':
         user = request.form.get('user')
         password = request.form.get('password')
-        result = add_user_data(current_user.id, user, password)
-        flash("Successfully added data" if result else "An error occurred.")
-
+        if add_user_data(current_user.id, user, password):
+            flash("Successfully added data")
+        else:
+            flash("An error occurred.")
     return render_template('index.html', username=current_user.id, mode="Add")
 
 @app.route('/protected/view_password', methods=['GET'])
 @login_required
 def view_password():
+    """Allow users to view their saved password-protected data."""
     credentials = get_user_data(current_user.id)
     return render_template('index.html', username=current_user.id, mode="View", credentials=credentials)
 
