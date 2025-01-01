@@ -8,23 +8,37 @@
 </head>
 <body>
     <div class="container">
-        {% if get_flashed_messages() %}
-        <h3>{{ get_flashed_messages() | join(" ") }}</h3>
-    {% endif %}
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-popup" id="flash-popup">
+                    <div class="popup-content">
+                        <span id="popup-text">{{ messages | join(', ') }}</span>
+                        <button class="close-btn" id="close-popup" aria-label="Close Popup">×</button>
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Notification Box for Errors -->
+        {% if error %}
+            <div class="notification error-notification" role="alert">
+                <span class="notification-text">{{ error }}</span>
+                <button class="close-btn" onclick="closeNotification()" aria-label="Close Notification">×</button>
+            </div>
+        {% endif %}
+        
         <div class="form-box">
             <h2>{{ 'Log In' if mode == 'login' else 'Sign Up' }}</h2>
             <form method="POST" action="{{ url_for(mode) }}">
                 <div class="input-group">
-                    <input type="text" name="user" placeholder="Email or Mobile" required>
-                    {% if error and mode == 'login' %}
-                        <span class="error">{{ error }}</span>
-                    {% endif %}
+                    <label for="user">Email or Mobile</label>
+                    <input type="text" id="user" name="user" placeholder="Email or Mobile" required aria-required="true">
                 </div>
                 <div class="input-group">
-                    <input type="password" name="password" placeholder="Password" required>
-                    {% if error and mode == 'signup' %}
-                        <span class="error">{{ error }}</span>
-                    {% endif %}
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required aria-required="true">
                 </div>
                 <button type="submit" class="primary-btn">{{ 'Log In' if mode == 'login' else 'Sign Up' }}</button>
             </form>
@@ -36,5 +50,32 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        // Close the error notification
+        function closeNotification() {
+            const notification = document.querySelector('.notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }
+
+        // Close the popup
+        document.addEventListener('DOMContentLoaded', () => {
+            const closePopupBtn = document.getElementById('close-popup');
+            const flashPopup = document.getElementById('flash-popup');
+
+            if (closePopupBtn && flashPopup) {
+                closePopupBtn.addEventListener('click', () => {
+                    flashPopup.style.display = 'none';
+                });
+
+                // Optionally auto-hide after 5 seconds
+                setTimeout(() => {
+                    flashPopup.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>
